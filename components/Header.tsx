@@ -1,0 +1,26 @@
+"use client";
+
+import { WalletSelector } from "./WalletSelector";
+import Image from "next/image";
+
+export function Header() {
+  return (
+    <div className="flex items-center justify-between px-4 py-2 mx-auto w-full flex-wrap">
+      <h1 className="select-none font-semibold uppercase ltr:ml-2 rtl:mr-2 gap-3 flex items-center">
+        <Image
+          alt={"Treasure Hunt"}
+          src="https://aptos.dev/docs/aptos-black.svg"
+          className="dark:invert"
+          width={32}
+          height={32}
+          priority
+        />
+        Treasure Hunt</h1>
+
+      <div className="flex gap-2 items-center flex-wrap">
+        <WalletSelector />
+      </div>
+    </div>
+  );
+}
+
