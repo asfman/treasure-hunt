@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 import { aptos, useABI } from "@/utils/aptosClient";
-import { MODULE_NAME, ACCOUNT_ADDRESS, APT_COIN } from "@/constants";
+import { MODULE_NAME, ACCOUNT_ADDRESS, APT_COIN, GAME_IDS } from "@/constants";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { convertAmountFromOnChainToHumanReadable, truncateAddress, compareAddress } from "@/utils/helpers";
@@ -10,6 +10,7 @@ import { useWallet, InputTransactionData } from "@aptos-labs/wallet-adapter-reac
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 import {
   Card,
@@ -33,10 +34,12 @@ type Game = {
 
 export function Content() {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        <Game gameId={1} />
-        <Game gameId={2} />
-        <Game gameId={3} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+        {
+          GAME_IDS.map((id) => (
+            <Game key={id} gameId={parseInt(id, 10)} />
+          ))
+        }
       </div>
     );
 }
@@ -66,16 +69,19 @@ export function Game({ gameId }: {gameId: number}) {
     });
     if (userTicketInfo.length)
       return <div>
-        <h4 className="flex items-center"><span className="mr-2 font-bold flex h-2 w-2 translate-y-0.5 rounded-full bg-gray-600" /><span className="text-xl">my ticket numbers:</span> </h4>
-        <p className="pl-3"><span className="font-bold">{userTicketInfo.join(", ")}</span></p>
+        <h4 className="flex items-center">
+          <span className="mr-2 font-bold flex h-2 w-2 translate-y-0.5 rounded-full bg-gray-600" />
+          <span className="text-xl">my tickets:</span>
+          <span className="pl-2 font-bold">{userTicketInfo.join(", ")}</span>
+        </h4>
       </div>
     return null;
   };
 
   const ClaimButton = () => {
-    if (game && !game.claimed && account?.address === game.winner)
+    if (game && account?.address === game.winner)
       return (
-        <Button className="ml-4" onClick={claimHandler}>Claim Rewards</Button>
+        <Button disabled={game.claimed} className="ml-4" onClick={claimHandler}>{!game.claimed ? "Claim Rewards" : "Rewards Claimed"}</Button>
       );
     return null;
   };
@@ -84,14 +90,8 @@ export function Game({ gameId }: {gameId: number}) {
     if (!game) return null;
     if (game.winner === "0x0") return null;
     return <div>
-      <h4 className="flex items-center"><span className="mr-2 font-bold flex h-2 w-2 translate-y-0.5 rounded-full bg-gray-600" /><span className="text-xl">lucky number:</span> </h4>
-      <p className="pl-3">
-        <span className="text-green-600 font-bold">{game.winner_index??"null"}</span>
-      </p>
-      <h4 className="flex items-center"><span className="mr-2 font-bold flex h-2 w-2 translate-y-0.5 rounded-full bg-gray-600" /><span className="text-xl">winner:</span> </h4>
-      <p className="pl-3">
-        <span className="text-green-600 font-bold">{truncateAddress(game.winner)}</span>
-      </p>
+      <h4 className="flex items-center"><span className="mr-2 font-bold flex h-2 w-2 translate-y-0.5 rounded-full bg-gray-600" /><span className="text-xl">lucky ticket:</span><span className="pl-2 text-red-600 font-bold">{game.winner_index??"null"}</span></h4>
+      <h4 className="flex items-center"><span className="mr-2 font-bold flex h-2 w-2 translate-y-0.5 rounded-full bg-gray-600" /><span className="text-xl">winner:</span><span title={game.winner} className="pl-2 text-red-600 font-bold">{truncateAddress(game.winner)}</span></h4>
     </div>
   };
 
@@ -183,27 +183,40 @@ export function Game({ gameId }: {gameId: number}) {
   }, [submitSatus]);
 
   return (
-    <div className="p-4">
+    <div className="p-4 relative">
       {!game && <div>loading</div>}
       {
         game &&
-        <Card className="bg-gray-200 min-h-[100%]">
-          <CardHeader>
-            <CardTitle>Hunt <strong className="text-4xl">{convertAmountFromOnChainToHumanReadable(game.ticket_price*game.ticket_amount, 8)}</strong> APT</CardTitle>
-            <CardDescription>you can win {convertAmountFromOnChainToHumanReadable(game.ticket_price*game.ticket_amount, 8)} APT with a bet of {convertAmountFromOnChainToHumanReadable(game.ticket_price, 8)} APT, winner will take all APT</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Progress value={progress > 0 ? progress : 1} title={progress + "%"} className="w-[100%]" />
-            <div>total tickets: <strong>{game.ticket_amount}</strong>, current tickets: <strong>{game.tickets.length}</strong></div>
-            <div className="flex items-center justify-center my-4"><Button onClick={ onSignAndSubmitTransaction } disabled={submitting || (!!game?.winner && game?.winner != "0x0")}><ReloadIcon className={cn("mr-2 h-4 w-4 animate-spin", submitting ? "" : "hidden")} />Buy Ticket</Button>
-<ClaimButton />
-            </div>
-            <WinnerInfo />
-            <UserInfo />
-          </CardContent>
-          <CardFooter>
-          </CardFooter>
-        </Card>
+          <>
+            <Badge className={cn("absolute right-1 top-2", game.winner != "0x0" ? "" : "bg-red-600")}>{game.winner != "0x0" ? "ended" : "hot"}</Badge>
+            <Card className="bg-gray-200 min-h-[100%]">
+              <CardHeader>
+                <CardTitle>Hunt <strong className="text-4xl">{convertAmountFromOnChainToHumanReadable(game.ticket_price*game.ticket_amount, 8)}</strong> APT</CardTitle>
+                <CardDescription>you can win {convertAmountFromOnChainToHumanReadable(game.ticket_price*game.ticket_amount, 8)} APT with a bet of {convertAmountFromOnChainToHumanReadable(game.ticket_price, 8)} APT, winner takes all</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-muted-foreground">total: <strong>{game.ticket_amount}</strong> tickets</div>
+                <Progress value={progress > 0 ? progress : 1} title={progress + "%"} className="w-[100%] my-2" />
+                <div className="flex items-center justify-between ">
+                  <div>
+                    <strong>{game.ticket_amount}</strong>
+                    <p className="text-muted-foreground">participants</p>
+                  </div>
+                  <div>
+                    <strong>{game.ticket_amount - game.tickets.length}</strong>
+                    <p className="text-muted-foreground">left</p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center my-4 mb-6"><Button onClick={ onSignAndSubmitTransaction } disabled={submitting || (!!game?.winner && game?.winner != "0x0")}><ReloadIcon className={cn("mr-2 h-4 w-4 animate-spin", submitting ? "" : "hidden")} />Buy Ticket</Button>
+    <ClaimButton />
+                </div>
+                <WinnerInfo />
+                <UserInfo />
+              </CardContent>
+              <CardFooter>
+              </CardFooter>
+            </Card>
+        </>
       }
     </div>
   );
