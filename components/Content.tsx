@@ -203,7 +203,7 @@ export function Game({ gameId }: {gameId: number}) {
                 <Progress value={progress > 0 ? progress : 1} title={progress + "%"} className="w-[100%] my-2" />
                 <div className="flex items-center justify-between ">
                   <div>
-                    <strong>{game.ticket_amount}</strong>
+                    <strong>{game.tickets.length}</strong>
                     <p className="text-muted-foreground">participants</p>
                   </div>
                   <div>
