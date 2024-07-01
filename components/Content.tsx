@@ -157,7 +157,7 @@ export function Game({ gameId }: {gameId: number}) {
     //accountAddress: RESOURCE_ADDRESS,
     //resourceType: `${ACCOUNT_ADDRESS}::${MODULE_NAME}::GameInfo<${APT_COIN}>`
     //});
-    const { abi } = await aptos.getAccountModule({ accountAddress: ACCOUNT_ADDRESS, moduleName: MODULE_NAME });
+    const { abi } = await aptos.getAccountModule({ accountAddress: ACCOUNT_ADDRESS!, moduleName: MODULE_NAME! });
     const [ ticket_amount, ticket_price, fee_rate, tickets, claimed, winner, winner_index ] = await useABI(abi as any).view.game({
       typeArguments: [APT_COIN],
       functionArguments: [gameId]
