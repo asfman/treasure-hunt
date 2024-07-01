@@ -70,8 +70,8 @@ export function Game({ gameId }: {gameId: number}) {
     if (userTicketInfo.length)
       return <div>
         <h4 className="flex items-center">
-          <span className="mr-2 font-bold flex h-2 w-2 translate-y-0.5 rounded-full bg-gray-600" />
-          <span className="text-xl">my tickets:</span>
+          <span className="shrink-0 mr-2 font-bold flex h-2 w-2 translate-y-0.5 rounded-full bg-gray-600" />
+          <span className="text-xl whitespace-nowrap">my tickets:</span>
           <span className="pl-2 font-bold">{userTicketInfo.map((ticket_index, idx) => {
             if (game?.winner_index && game.winner_index == ticket_index)
               return <><strong className="text-red-600">{ticket_index}</strong>{ idx === userTicketInfo.length - 1 ? "" : ", "}</>
