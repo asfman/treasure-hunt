@@ -1,7 +1,7 @@
 import { NETWORK } from "@/constants";
 import { Aptos, AptosConfig, MoveModule } from "@aptos-labs/ts-sdk";
 
-export const aptos = new Aptos(new AptosConfig({ network: NETWORK }));
+export const aptos = new Aptos(new AptosConfig({ network: NETWORK as any }));
 
 export function useABI(abi: MoveModule) {
   return {
