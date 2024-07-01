@@ -72,7 +72,11 @@ export function Game({ gameId }: {gameId: number}) {
         <h4 className="flex items-center">
           <span className="mr-2 font-bold flex h-2 w-2 translate-y-0.5 rounded-full bg-gray-600" />
           <span className="text-xl">my tickets:</span>
-          <span className="pl-2 font-bold">{userTicketInfo.join(", ")}</span>
+          <span className="pl-2 font-bold">{userTicketInfo.map((ticket_index, idx) => {
+            if (game?.winner_index && game.winner_index == ticket_index)
+              return <><strong className="text-red-600">{ticket_index}</strong>{ idx === userTicketInfo.length - 1 ? "" : ", "}</>
+            return <>{ticket_index}{ idx === userTicketInfo.length - 1 ? "" : ", "}</>
+          })}</span>
         </h4>
       </div>
     return null;
@@ -95,19 +99,19 @@ export function Game({ gameId }: {gameId: number}) {
     </div>
   };
 
-  const Participants = () => {
-    if (!game) return null;
-    return (<>
-          <h4 className="flex items-center"><span className="mr-2 font-bold flex h-2 w-2 translate-y-0.5 rounded-full bg-gray-600" /><span className="text-xl">participants({game.tickets.length}):</span></h4>
-          <ol className="list-decimal mx-4 mt-1">
-          {
-            game.tickets.map((addr, index) => (
-              <li title={addr} key={addr + index}>{truncateAddress(addr)}</li>
-            ))
-          }
-          </ol>
-    </>);
-  };
+  //const Participants = () => {
+    //if (!game) return null;
+    //return (<>
+          //<h4 className="flex items-center"><span className="mr-2 font-bold flex h-2 w-2 translate-y-0.5 rounded-full bg-gray-600" /><span className="text-xl">participants({game.tickets.length}):</span></h4>
+          //<ol className="list-decimal mx-4 mt-1">
+          //{
+            //game.tickets.map((addr, index) => (
+              //<li title={addr} key={addr + index}>{truncateAddress(addr)}</li>
+            //))
+          //}
+          //</ol>
+    //</>);
+  //};
 
   const claimHandler = async () => {
     const typeArgs: any = [APT_COIN];
