@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 import { aptos, useABI } from "@/utils/aptosClient";
-import { MODULE_NAME, ACCOUNT_ADDRESS, APT_COIN, RESOURCE_ADDRESS } from "@/constants";
+import { MODULE_NAME, ACCOUNT_ADDRESS, APT_COIN } from "@/constants";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { convertAmountFromOnChainToHumanReadable, truncateAddress, compareAddress } from "@/utils/helpers";
@@ -36,6 +36,7 @@ export function Content() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         <Game gameId={1} />
         <Game gameId={2} />
+        <Game gameId={3} />
       </div>
     );
 }
@@ -189,7 +190,7 @@ export function Game({ gameId }: {gameId: number}) {
         <Card className="bg-gray-200 min-h-[100%]">
           <CardHeader>
             <CardTitle>Hunt <strong className="text-4xl">{convertAmountFromOnChainToHumanReadable(game.ticket_price*game.ticket_amount, 8)}</strong> APT</CardTitle>
-            <CardDescription>you can win {convertAmountFromOnChainToHumanReadable(game.ticket_price*game.ticket_amount, 8)} APT by {convertAmountFromOnChainToHumanReadable(game.ticket_price, 8)} APT, winner will take all APT</CardDescription>
+            <CardDescription>you can win {convertAmountFromOnChainToHumanReadable(game.ticket_price*game.ticket_amount, 8)} APT with a bet of {convertAmountFromOnChainToHumanReadable(game.ticket_price, 8)} APT, winner will take all APT</CardDescription>
           </CardHeader>
           <CardContent>
             <Progress value={progress > 0 ? progress : 1} title={progress + "%"} className="w-[100%]" />

@@ -10,10 +10,9 @@ export function Header() {
         <Image
           alt={"Treasure Hunt"}
           src="https://aptos.dev/docs/aptos-black.svg"
-          className="dark:invert"
-          width={32}
-          height={32}
-          priority
+          width={0}
+          height={0}
+          style={{ width: '32px', height: 'auto' }}
         />
         Treasure Hunt</h1>
 
