@@ -83,9 +83,9 @@ export function Game({ gameId }: {gameId: number}) {
   };
 
   const ClaimButton = () => {
-    if (game && account?.address === game.winner)
+    if (game && !game.claimed && account?.address === game.winner)
       return (
-        <Button disabled={game.claimed} className="ml-4" onClick={claimHandler}>{!game.claimed ? "Claim Rewards" : "Rewards Claimed"}</Button>
+        <Button className="ml-4" onClick={claimHandler}>Claim Rewards</Button>
       );
     return null;
   };
