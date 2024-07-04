@@ -11,7 +11,6 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
-
 import {
   Card,
   CardContent,
@@ -186,11 +185,14 @@ export function Game({ gameId }: {gameId: number}) {
     return () => clearInterval(intervalId);
   }, [submitSatus]);
 
+  if (!game)
+    return (
+      <Card className="bg-gray-200 flex items-center justify-center min-h-[500px] text-gray-400">loading...</Card>
+     );
+
   return (
     <div className="p-4 relative">
-      {!game && <Card className="bg-gray-200 flex items-center justify-center min-h-[520px] text-gray-400">loading...</Card>}
       {
-        game &&
           <>
             <Badge className={cn("absolute right-1 top-2", game.winner != "0x0" ? "" : "bg-red-600")}>{game.winner != "0x0" ? "ended" : "hot"}</Badge>
             <Card className="bg-gray-200 min-h-[100%]">
