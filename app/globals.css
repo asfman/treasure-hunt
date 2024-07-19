@@ -74,3 +74,94 @@
       @apply bg-background text-foreground;
     }
   }
+
+  @layer components {
+    .coin {
+      width: 10rem;
+      height: 10rem;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+    .coin div {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backface-visibility: hidden;
+      position: absolute;
+      border: 2px solid #ddd;
+      color: gray;
+      font-weight: 600;
+      font-size: 2rem;
+      line-height: 1;
+    }
+    .coin .heads {
+      background: white url(/heads.png);
+      background-size: contain;
+    }
+    .coin .tails {
+      background: white url(/tails.png);
+      background-size: contain;
+      transform: rotateY(-180deg);
+    }
+    .apt-coin {
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+      margin-left: 6px;
+      background: url(/coin.svg) center center no-repeat;
+    }
+    .coin-amount * {
+      transition: all 300ms ease-in-out 0s;
+    }
+    @keyframes flip {
+      from {
+        transform: rotateY(0deg);
+      }
+      to {
+        transform: rotateY(1800deg);
+      }
+    }
+    @keyframes flipReverse {
+      from {
+        transform: rotateY(180deg);
+      }
+      to {
+        transform: rotateY(1980deg);
+      }
+    }
+    @keyframes flip2 {
+      from {
+        transform: rotateY(0deg);
+      }
+      to {
+        transform: rotateY(1800deg);
+      }
+    }
+    @keyframes flipReverse2 {
+      from {
+        transform: rotateY(180deg);
+      }
+      to {
+        transform: rotateY(1980deg);
+      }
+    }
+    @keyframes flipSwitch {
+      from {
+        transform: rotateY(180deg);
+      }
+      to {
+        transform: rotateY(360deg);
+      }
+    }
+    @keyframes flipSwitchReverse {
+      from {
+        transform: rotateY(0deg);
+      }
+      to {
+        transform: rotateY(180deg);
+      }
+    }
+  }

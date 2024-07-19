@@ -15,6 +15,7 @@ export function WalletProvider({ children }: PropsWithChildren) {
       autoConnect={true}
       dappConfig={{ network: NETWORK as any }}
       onError={(error) => {
+        if (/!reject/i.test(error.toString()))
         toast({
           variant: "destructive",
           title: "Error",

@@ -1,5 +1,5 @@
 import { NETWORK } from "@/constants";
-import { Aptos, AptosConfig, MoveModule } from "@aptos-labs/ts-sdk";
+import { Aptos, AptosConfig, MoveModule, MoveStructId } from "@aptos-labs/ts-sdk";
 
 export const aptos = new Aptos(new AptosConfig({ network: NETWORK as any }));
 
@@ -26,3 +26,25 @@ export function useABI(abi: MoveModule) {
   };
 }
 
+export async function getModuleEvents(eventType: MoveStructId) {
+    const events = await aptos.getModuleEventsByEventType({eventType});
+    return events
+}
+
+export const getEventByHash = async (transactionHash: string, eventType: MoveStructId) => {
+    const transaction: any = await aptos.getTransactionByHash({
+      transactionHash
+    });
+    if (transaction && transaction.events) {
+      for (const event of transaction.events) {
+        if (event.type === eventType)
+          return event;
+      }
+    }
+}
+
+export async function getAPTBalance(userAddr: string) {
+  return await aptos.getAccountAPTAmount({
+    accountAddress: userAddr,
+  });
+}

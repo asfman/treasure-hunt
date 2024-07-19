@@ -1,10 +1,10 @@
 export const APT_DECIMALS = 8;
 
-export const convertAmountFromHumanReadableToOnChain = (value: number, decimal: number) => {
+export const convertAmountFromHumanReadableToOnChain = (value: number, decimal: number = APT_DECIMALS) => {
   return value * Math.pow(10, decimal);
 };
 
-export const convertAmountFromOnChainToHumanReadable = (value: number, decimal: number) => {
+export const convertAmountFromOnChainToHumanReadable = (value: number, decimal: number = APT_DECIMALS) => {
   return value / Math.pow(10, decimal);
 };
 
@@ -19,4 +19,11 @@ function stripAddress(address: string) {
 export function compareAddress(a: string, b: string) {
   return stripAddress(a) === stripAddress(b);
 }
+
+export async function sleep(timeMs: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeMs);
+  });
+}
+
 
